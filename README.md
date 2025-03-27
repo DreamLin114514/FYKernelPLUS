@@ -4,15 +4,15 @@
 FYKernelPLUS is licensed under **GNU GPL v2**. See [LICENSE](LICENSE) for details.
 
 ## 文件结构
-Makefile # 内核模块构建文件
-fykernelplus.h # 头文件(核心定义)
-fykernelplus-cli.c # 用户空间命令行工具
-cpu_scheduler.c # CPU调度实现
-gpu_manager.c # GPU管理实现
-memory_manager.c # 内存管理实现
-procfs_interface.c # Procfs接口实现
-sysfs_interface.c # Sysfs接口实现
-main.c # 模块初始化和退出
+-Makefile # 内核模块构建文件
+-fykernelplus.h # 头文件(核心定义)
+-fykernelplus-cli.c # 用户空间命令行工具
+-cpu_scheduler.c # CPU调度实现
+-gpu_manager.c # GPU管理实现
+-memory_manager.c # 内存管理实现
+-procfs_interface.c # Procfs接口实现
+-sysfs_interface.c # Sysfs接口实现
+-main.c # 模块初始化和退出
 
 ## 功能特性
 

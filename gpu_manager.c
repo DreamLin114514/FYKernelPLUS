@@ -8,6 +8,7 @@
  */
 
 #include "fykernelplus.h"
+#include "nvidia_optimization.h"
 
 static int gpu_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
 {
@@ -100,4 +101,52 @@ void fy_gpu_manager_exit(void)
 {
     pci_unregister_driver(&fy_gpu_driver);
     FY_INFO("GPU manager exited\n");
+}
+
+static int handle_nvidia_gpu(struct pci_dev *dev)
+{
+    int ret;
+    struct fy_gpu_device *gpu = &fykp_ctx.gpus[fykp_ctx.num_gpus];
+    
+    // 执行英伟达专用初始化
+    ret = nvidia_gpu_init(dev);
+    if (ret) {
+        FY_ERR("NVIDIA GPU initialization failed (%d)\n", ret);
+        return ret;
+    }
+
+    // 配置默认电源模式
+    nvidia_set_power_mode(dev, NVIDIA_POWER_ADAPTIVE);
+    
+    // 记录设备信息
+    gpu->dev = dev;
+    gpu->vendor = "NVIDIA";
+    gpu->max_mem = pci_resource_len(dev, 0);
+    
+    // 启用显存ECC
+    struct nvidia_mem_config mem_cfg = {
+        .frequency_mhz = 7000,
+        .voltage_uv = 1100000,
+        .ecc_enabled = true
+    };
+    nvidia_configure_memory(dev, &mem_cfg);
+    
+    FY_INFO("Optimized NVIDIA GPU detected: %04x:%04x\n", 
+           dev->vendor, dev->device);
+    return 0;
+}
+
+static int generic_gpu_init(struct pci_dev *dev)
+{
+    // 原有通用初始化逻辑
+    // ...
+}
+
+int fy_gpu_manager_probe(struct pci_dev *dev)
+{
+    if (dev->vendor == NVIDIA_VENDOR_ID && 
+        (dev->class >> 16) == (NVIDIA_GPU_CLASS >> 16)) {
+        return handle_nvidia_gpu(dev);
+    }
+    return generic_gpu_init(dev);
 }

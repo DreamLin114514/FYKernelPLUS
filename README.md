@@ -65,7 +65,7 @@ cd (模块路径)
 sudo make uninstall
 ```
 ##其他说明
--GPU以及RAM调度配置使用Deepseek V1优化
+-GPU(不包含nvidia文件)以及RAM调度配置使用Deepseek V1优化
 
 ##⚠ 重要警告
 - 仅兼容Linux 6.x+内核

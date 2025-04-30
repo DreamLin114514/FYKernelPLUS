@@ -17,7 +17,7 @@
 #define SYSFS_MODE_PATH "/sys/kernel/fykernelplus/policy"
 
 void show_version() {
-    printf("FYKernel+ 作者:DreamLin 版本:FYKernelPLUS 1.0.0(1000)\n");
+    printf("FYKernel+ 作者:DreamLin 版本:FYKernelPLUS 1.1.1beta(1111)\n");
 }
 
 void show_modes() {

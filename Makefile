@@ -8,7 +8,13 @@ fykernelplus-objs := main.o cpu_scheduler.o gpu_manager.o memory_manager.o procf
 KDIR ?= /lib/modules/$(shell uname -r)/build
 PWD := $(shell pwd)
 
-ccflags-y := -std=gnu11 -Wall -Wextra -Wno-unused-parameter -DVERSION=\"1.0.0\"
+ccflags-y := -std=gnu11 -Wall -Wextra -Wno-unused-parameter -DVERSION=\"1.1.1\"
+ccflags-y += -I$(src)/nvidia
+
+ifneq ($(wildcard /usr/src/nvidia),)
+ccflags-y += -DENABLE_NVIDIA_OPTIMIZATION=1
+fykernelplus-objs += nvidia/nvidia_optimization.o
+endif
 
 all: module cli
 
